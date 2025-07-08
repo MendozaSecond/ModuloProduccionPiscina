@@ -112,6 +112,10 @@ namespace ModuloProduccionPiscina.Controllers
 
             if (pedido == null) return NotFound();
 
+            var productosDb = await _context.Productos
+                .Where(p => p.Estado == 'A')
+                .ToListAsync();
+
             var viewModel = new PedidoViewModel
             {
                 Pedido = pedido,
@@ -123,17 +127,16 @@ namespace ModuloProduccionPiscina.Controllers
                         Text = p.Nombre
                     }).ToListAsync(),
 
-                ProductosDisponibles = await _context.Productos
-                    .Where(p => p.Estado == 'A')
-                    .Select(p => new ProductoSeleccionado
-                    {
-                        IdProducto = p.IdProducto,
-                        Nombre = p.Nombre,
-                        Cantidad = pedido.Detalles
-                                        .Where(d => d.IdProducto == p.IdProducto)
-                                        .Select(d => d.Cantidad)
-                                        .FirstOrDefault()
-                    }).ToListAsync()
+                 ProductosDisponibles = productosDb
+                     .Select(p => new ProductoSeleccionado
+                     {
+                         IdProducto = p.IdProducto,
+                         Nombre = p.Nombre,
+                         Cantidad = pedido.Detalles
+                                         .Where(d => d.IdProducto == p.IdProducto)
+                                         .Select(d => d.Cantidad)
+                                         .FirstOrDefault()
+                     }).ToList()
             };
 
             return View(viewModel);
