@@ -1,0 +1,36 @@
+@model List<ModuloProduccionPiscina.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Pedidos";
+}
+
+<h2>Pedidos registrados</h2>
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-success">+ Nuevo Pedido</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Piscina</th>
+            <th>Registrado por</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var pedido in Model)
+    {
+        <tr>
+            <td>@pedido.FechaConsumo.ToShortDateString()</td>
+            <td>@pedido.Piscina?.Nombre</td>
+            <td>@pedido.UsuarioId</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@pedido.IdPedido" class="btn btn-sm btn-info">Detalles</a>
+                <a asp-action="Edit" asp-route-id="@pedido.IdPedido" class="btn btn-warning me-2">Editar</a>
+                <a asp-action="Anular" asp-route-id="@pedido.IdPedido" class="btn btn-sm btn-danger">Anular</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
