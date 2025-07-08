@@ -12,10 +12,6 @@
         <label asp-for="Pedido.IdPiscina" class="form-label">Piscina</label>
         <select asp-for="Pedido.IdPiscina" class="form-select" asp-items="Model.Piscinas">
             <option value="">-- Seleccione una piscina --</option>
-            @foreach (var piscina in Model.Piscinas)
-            {
-                <option value="@piscina.Value">@piscina.Text</option>
-            }
         </select>
         <span asp-validation-for="Pedido.IdPiscina" class="text-danger"></span>
     </div>
