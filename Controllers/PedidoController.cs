@@ -8,9 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using ModuloProduccionPiscina.Models;
 using Microsoft.AspNetCore.Identity;
 using ModuloProduccionPiscina.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace ModuloProduccionPiscina.Controllers
 {
+    [Authorize]
     public class PedidoController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,15 +26,54 @@ namespace ModuloProduccionPiscina.Controllers
         }
 
         // GET: Pedido
-        public async Task<IActionResult> Index()
+       public async Task<IActionResult> Index(DateTime? fechaDesde, DateTime? fechaHasta)
         {
-            var pedidos = await _context.Pedidos
+            // Restaurar rango almacenado en sesión si no se envían parámetros
+           if (!fechaDesde.HasValue || !fechaHasta.HasValue)
+            {
+                var desdeSession = HttpContext.Session.GetString("FechaDesde");
+                var hastaSession = HttpContext.Session.GetString("FechaHasta");
+                if (!fechaDesde.HasValue && !string.IsNullOrEmpty(desdeSession))
+                {
+                    fechaDesde = DateTime.Parse(desdeSession);
+                }
+                if (!fechaHasta.HasValue && !string.IsNullOrEmpty(hastaSession))
+                {
+                    fechaHasta = DateTime.Parse(hastaSession);
+                }
+            }
+
+            // Si aún no hay valores, usar los últimos 5 días por defecto
+            if (!fechaDesde.HasValue || !fechaHasta.HasValue)
+            {
+                fechaHasta ??= DateTime.Today;
+                fechaDesde ??= DateTime.Today.AddDays(-5);
+            }
+
+            // Guardar en sesión para futuras visitas
+            HttpContext.Session.SetString("FechaDesde", fechaDesde.Value.ToString("yyyy-MM-dd"));
+            HttpContext.Session.SetString("FechaHasta", fechaHasta.Value.ToString("yyyy-MM-dd"));
+
+            IQueryable<Pedido> query = _context.Pedidos
                 .Where(p => p.Estado == 'A')
                 .Include(p => p.Detalles)
                 .Include(p => p.Detalles!)
                     .ThenInclude(d => d.Producto)
-                .Include(p => p.Piscina)
-                .ToListAsync();
+                .Include(p => p.Piscina);
+
+            query = query.Where(p => p.FechaConsumo >= fechaDesde.Value && p.FechaConsumo <= fechaHasta.Value);
+            
+            var pedidos = await (from p in query
+                                 join u in _context.Users on p.UsuarioId equals u.Id into pu
+                                 from user in pu.DefaultIfEmpty()
+                                 select new PedidoIndexViewModel
+                                 {
+                                     Pedido = p,
+                                     UserName = user != null ? user.UserName : null
+                                 }).ToListAsync();
+
+            ViewBag.FechaDesde = fechaDesde.Value.ToString("yyyy-MM-dd");
+            ViewBag.FechaHasta = fechaHasta.Value.ToString("yyyy-MM-dd");
 
             return View(pedidos);
         }
@@ -49,7 +91,18 @@ namespace ModuloProduccionPiscina.Controllers
 
             if (pedido == null) return NotFound();
 
-            return View(pedido);
+            var userName = await _context.Users
+                .Where(u => u.Id == pedido.UsuarioId)
+                .Select(u => u.UserName)
+                .FirstOrDefaultAsync();
+
+            var viewModel = new PedidoDetailsViewModel
+            {
+                Pedido = pedido,
+                UserName = userName
+            };
+
+            return View(viewModel);
         }
 
         // GET: Pedido/Create
@@ -127,7 +180,7 @@ namespace ModuloProduccionPiscina.Controllers
                         Text = p.Nombre
                     }).ToListAsync(),
 
-                 ProductosDisponibles = productosDb
+                ProductosDisponibles = productosDb
                      .Select(p => new ProductoSeleccionado
                      {
                          IdProducto = p.IdProducto,
@@ -218,5 +271,5 @@ namespace ModuloProduccionPiscina.Controllers
         }
 
     }
-    
+
 }

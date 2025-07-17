@@ -1,51 +1,63 @@
-@model List<ModuloProduccionPiscina.Models.Pedido>
+@model List<ModuloProduccionPiscina.Models.ViewModels.PedidoIndexViewModel>
 
 @{
     ViewData["Title"] = "Pedidos";
 }
 
-<h2>Pedidos registrados</h2>
-<div class="mb-3 d-flex justify-content-between">
-    <a asp-action="Create" class="btn btn-success">+ Nuevo Pedido</a>
-    <input type="text" id="buscarPedidos" class="form-control w-25" placeholder="Buscar..." onkeyup="filtrarTabla()" />
+<!-- TÍTULO Y BOTÓN NUEVO -->
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary mb-0">📋 Pedidos Registrados</h2>
+        <a asp-action="Create" class="btn btn-success">+ Nuevo Pedido</a>
+    </div>
+
+    <!-- BÚSQUEDA POR FECHAS -->
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-auto">
+            <label for="fechaDesde" class="form-label">Desde</label>
+            <input type="date" id="fechaDesde" name="fechaDesde" class="form-control" value="@ViewBag.FechaDesde" />
+        </div>
+        <div class="col-auto">
+            <label for="fechaHasta" class="form-label">Hasta</label>
+            <input type="date" id="fechaHasta" name="fechaHasta" class="form-control" value="@ViewBag.FechaHasta" />
+        </div>
+        <div class="col-auto align-self-end">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+
+    <!-- TABLA DE PEDIDOS -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle" id="tablaPedidos">
+            <thead class="table-light text-center">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Piscina</th>
+                    <th>Registrado por</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">@item.Pedido.FechaConsumo.ToShortDateString()</td>
+                        <td class="text-center">@item.Pedido.Piscina?.Nombre</td>
+                        <td class="text-center">
+                            @((!string.IsNullOrEmpty(item.UserName) && item.UserName.Contains("@")) 
+                                ? item.UserName.Split('@')[0] 
+                                : "No disponible")
+                        </td>
+                        <td class="text-center">
+                            <a asp-action="Details" asp-route-id="@item.Pedido.IdPedido" class="btn btn-sm btn-outline-info me-1">Detalles</a>
+                            <a asp-action="Edit" asp-route-id="@item.Pedido.IdPedido" class="btn btn-sm btn-outline-warning me-1">Editar</a>
+                            <a asp-action="Anular" asp-route-id="@item.Pedido.IdPedido" class="btn btn-sm btn-outline-danger">Anular</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<table class="table table-striped" id="tablaPedidos">
-    <thead>
-        <tr>
-            <th>Fecha</th>
-            <th>Piscina</th>
-            <th>Registrado por</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var pedido in Model)
-    {
-        <tr>
-            <td>@pedido.FechaConsumo.ToShortDateString()</td>
-            <td>@pedido.Piscina?.Nombre</td>
-            <td>@pedido.UsuarioId</td>
-            <td>
-                <a asp-action="Details" asp-route-id="@pedido.IdPedido" class="btn btn-sm btn-info">Detalles</a>
-                <a asp-action="Edit" asp-route-id="@pedido.IdPedido" class="btn btn-sm btn-warning">Editar</a>
-                <a asp-action="Anular" asp-route-id="@pedido.IdPedido" class="btn btn-sm btn-danger">Anular</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
 
-@section Scripts {
-    <script>
-        function filtrarTabla() {
-            const input = document.getElementById('buscarPedidos').value.toLowerCase();
-            const filas = document.querySelectorAll('#tablaPedidos tbody tr');
-
-            filas.forEach(fila => {
-                const textoFila = fila.innerText.toLowerCase();
-                fila.style.display = textoFila.includes(input) ? '' : 'none';
-            });
-        }
-    </script>
-}

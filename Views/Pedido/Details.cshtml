@@ -1,34 +1,50 @@
-@model ModuloProduccionPiscina.Models.Pedido
+@model ModuloProduccionPiscina.Models.ViewModels.PedidoDetailsViewModel
 
 @{
     ViewData["Title"] = "Detalle del Pedido";
 }
 
-<h2>Detalle del Pedido</h2>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title text-primary mb-4">📝 @ViewData["Title"]</h3>
 
-<div class="mb-3">
-    <strong>Fecha de consumo:</strong> @Model.FechaConsumo.ToShortDateString()<br />
-    <strong>Piscina:</strong> @Model.Piscina?.Nombre<br />
-    <strong>Registrado por:</strong> @Model.UsuarioId
+            <!-- Información del Pedido -->
+            <div class="mb-4">
+                <p><strong>📆 Fecha de consumo:</strong> @Model.Pedido.FechaConsumo.ToShortDateString()</p>
+                <p><strong>🏊 Piscina:</strong> @Model.Pedido.Piscina?.Nombre</p>
+                <p><strong>👤 Registrado por:</strong> @((!string.IsNullOrEmpty(Model.UserName) && Model.UserName.Contains("@")) 
+                        ? Model.UserName.Split('@')[0] 
+                        : "No disponible")
+                </p>
+            </div>
+
+            <!-- Productos -->
+            <h5 class="mb-3 text-secondary">Productos consumidos</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th style="width: 150px;">Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detalle in Model.Pedido.Detalles)
+                        {
+                            <tr>
+                                <td>@detalle.Producto?.Nombre</td>
+                                <td>@detalle.Cantidad</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Volver -->
+            <div class="mt-4 text-end">
+                <a asp-action="Index" class="btn btn-outline-secondary">← Volver</a>
+            </div>
+        </div>
+    </div>
 </div>
-
-<h4>Productos consumidos</h4>
-<table class="table table-bordered">
-    <thead class="table-light">
-        <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var detalle in Model.Detalles)
-    {
-        <tr>
-            <td>@detalle.Producto?.Nombre</td>
-            <td>@detalle.Cantidad</td>
-        </tr>
-    }
-    </tbody>
-</table>
-
-<a asp-action="Index" class="btn btn-secondary">Volver</a>
