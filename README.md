@@ -41,3 +41,14 @@ ModuloProduccionPiscina/
 │   └── js/
 ├── appsettings.json
 └── Program.cs
+
+## 🖼️ Vista previa del sistema
+### Inicio de sesión
+![Inicio de sesión](docsReadme/Login.png)
+
+### Inicio
+![Inicio](docsReadme/Inicio.png)
+
+### Detalle de un pedido
+![Pedidos Realizados](docsReadme/Pedidos.png)
+
