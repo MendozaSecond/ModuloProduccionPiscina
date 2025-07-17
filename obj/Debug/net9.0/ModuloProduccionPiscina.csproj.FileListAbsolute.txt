@@ -610,7 +610,6 @@ C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProducc
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Debug\net9.0\scopedcss\bundle\ModuloProduccionPiscina.styles.css
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Debug\net9.0\scopedcss\projectbundle\ModuloProduccionPiscina.bundle.scp.css
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Debug\net9.0\compressed\h4xj0lpf5l-b9sayid5wm.gz
-C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Debug\net9.0\compressed\aw2jwgnwmk-61n19gt1b8.gz
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Debug\net9.0\compressed\ok4967dmuu-xtxxf3hu2r.gz
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Debug\net9.0\compressed\12frfxrxko-bqjiyaj88i.gz
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Debug\net9.0\compressed\hrlnkky638-c2jlpeoesf.gz
@@ -684,3 +683,4 @@ C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProducc
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Debug\net9.0\ModuloProduccionPiscina.genruntimeconfig.cache
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Debug\net9.0\ref\ModuloProduccionPiscina.dll
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Debug\net9.0\ModuloProduccionPiscina.sourcelink.json
+C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Debug\net9.0\compressed\aw2jwgnwmk-61n19gt1b8.gz

@@ -1,48 +1,60 @@
 @model ModuloProduccionPiscina.Models.ViewModels.PedidoViewModel
 
-
 @{
     ViewData["Title"] = "Nuevo Pedido";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title text-primary mb-4">@ViewData["Title"]</h3>
 
-<form asp-action="Create" method="post">
-    <div class="mb-3">
-        <label asp-for="Pedido.IdPiscina" class="form-label">Piscina</label>
-        <select asp-for="Pedido.IdPiscina" class="form-select" asp-items="Model.Piscinas">
-            <option value="">-- Seleccione una piscina --</option>
-        </select>
-        <span asp-validation-for="Pedido.IdPiscina" class="text-danger"></span>
+            <form asp-action="Create" method="post">
+                <!-- SELECCIÓN DE PISCINA -->
+                <div class="mb-4">
+                    <label asp-for="Pedido.IdPiscina" class="form-label fw-semibold">Piscina</label>
+                    <select asp-for="Pedido.IdPiscina" class="form-select" asp-items="Model.Piscinas">
+                        <option value="">-- Seleccione una piscina --</option>
+                    </select>
+                    <span asp-validation-for="Pedido.IdPiscina" class="text-danger small"></span>
+                </div>
+
+                <!-- PRODUCTOS -->
+                <h5 class="mb-3 text-secondary">Productos a registrar</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th style="width: 150px;">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.ProductosDisponibles.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.HiddenFor(m => m.ProductosDisponibles[i].IdProducto)
+                                        @Model.ProductosDisponibles[i].Nombre
+                                    </td>
+                                    <td>
+                                        <input asp-for="ProductosDisponibles[i].Cantidad" class="form-control" type="number" step="0.01" min="0" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- BOTONES -->
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="submit" class="btn btn-primary me-2">💾 Guardar</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <h4>Productos</h4>
-    <table class="table table-bordered">
-        <thead class="table-light">
-            <tr>
-                <th>Producto</th>
-                <th style="width: 150px;">Cantidad</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < Model.ProductosDisponibles.Count; i++)
-            {
-                <tr>
-                    <td>
-                        @Html.HiddenFor(m => m.ProductosDisponibles[i].IdProducto)
-                        @Model.ProductosDisponibles[i].Nombre
-                    </td>
-                    <td>
-                        <input asp-for="ProductosDisponibles[i].Cantidad" class="form-control" type="number" step="0.01" min="0" />
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

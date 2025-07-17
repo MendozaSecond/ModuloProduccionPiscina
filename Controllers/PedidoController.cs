@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using ModuloProduccionPiscina.Models;
 using Microsoft.AspNetCore.Identity;
 using ModuloProduccionPiscina.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ModuloProduccionPiscina.Controllers
 {
+    [Authorize]
     public class PedidoController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -127,7 +129,7 @@ namespace ModuloProduccionPiscina.Controllers
                         Text = p.Nombre
                     }).ToListAsync(),
 
-                 ProductosDisponibles = productosDb
+                ProductosDisponibles = productosDb
                      .Select(p => new ProductoSeleccionado
                      {
                          IdProducto = p.IdProducto,
