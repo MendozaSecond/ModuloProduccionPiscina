@@ -23,6 +23,16 @@ Este proyecto es un sistema web desarrollado con **ASP.NET Core MVC**, destinado
 - **Bootstrap 5**
 - **Azure App Service (publicado)**
 
+## 🖼️ Vista previa del sistema
+### Inicio de sesión
+![Inicio de sesión](docsReadme/Login.png)
+
+### Inicio
+![Inicio](docsReadme/Inicio.png)
+
+### Detalle de un pedido
+![Pedidos Realizados](docsReadme/Pedidos.png)
+
 ## 📂 Estructura del proyecto
 
 ```plaintext
@@ -42,13 +52,5 @@ ModuloProduccionPiscina/
 ├── appsettings.json
 └── Program.cs
 
-## 🖼️ Vista previa del sistema
-### Inicio de sesión
-![Inicio de sesión](docsReadme/Login.png)
 
-### Inicio
-![Inicio](docsReadme/Inicio.png)
-
-### Detalle de un pedido
-![Pedidos Realizados](docsReadme/Pedidos.png)
 
