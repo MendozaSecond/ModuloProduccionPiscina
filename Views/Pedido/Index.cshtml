@@ -1,4 +1,4 @@
-@model List<ModuloProduccionPiscina.Models.Pedido>
+@model List<ModuloProduccionPiscina.Models.ViewModels.PedidoIndexViewModel>
 
 @{
     ViewData["Title"] = "Pedidos";
@@ -11,11 +11,20 @@
         <a asp-action="Create" class="btn btn-success">+ Nuevo Pedido</a>
     </div>
 
-    <!-- BÚSQUEDA -->
-    <div class="input-group mb-4 w-50">
-        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-        <input type="text" id="buscarPedidos" class="form-control" placeholder="Buscar pedidos..." onkeyup="filtrarTabla()" />
-    </div>
+    <!-- BÚSQUEDA POR FECHAS -->
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-auto">
+            <label for="fechaDesde" class="form-label">Desde</label>
+            <input type="date" id="fechaDesde" name="fechaDesde" class="form-control" value="@ViewBag.FechaDesde" />
+        </div>
+        <div class="col-auto">
+            <label for="fechaHasta" class="form-label">Hasta</label>
+            <input type="date" id="fechaHasta" name="fechaHasta" class="form-control" value="@ViewBag.FechaHasta" />
+        </div>
+        <div class="col-auto align-self-end">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
 
     <!-- TABLA DE PEDIDOS -->
     <div class="table-responsive">
@@ -29,16 +38,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var pedido in Model)
+                @foreach (var item in Model)
                 {
                     <tr>
-                        <td class="text-center">@pedido.FechaConsumo.ToShortDateString()</td>
-                        <td class="text-center">@pedido.Piscina?.Nombre</td>
-                        <td class="text-center">@(!string.IsNullOrEmpty(pedido.UsuarioId) ? pedido.UsuarioId.Split('@')[0] : "No disponible")</td>
+                        <td class="text-center">@item.Pedido.FechaConsumo.ToShortDateString()</td>
+                        <td class="text-center">@item.Pedido.Piscina?.Nombre</td>
                         <td class="text-center">
-                            <a asp-action="Details" asp-route-id="@pedido.IdPedido" class="btn btn-sm btn-outline-info me-1">Detalles</a>
-                            <a asp-action="Edit" asp-route-id="@pedido.IdPedido" class="btn btn-sm btn-outline-warning me-1">Editar</a>
-                            <a asp-action="Anular" asp-route-id="@pedido.IdPedido" class="btn btn-sm btn-outline-danger">Anular</a>
+                            @((!string.IsNullOrEmpty(item.UserName) && item.UserName.Contains("@")) 
+                                ? item.UserName.Split('@')[0] 
+                                : "No disponible")
+                        </td>
+                        <td class="text-center">
+                            <a asp-action="Details" asp-route-id="@item.Pedido.IdPedido" class="btn btn-sm btn-outline-info me-1">Detalles</a>
+                            <a asp-action="Edit" asp-route-id="@item.Pedido.IdPedido" class="btn btn-sm btn-outline-warning me-1">Editar</a>
+                            <a asp-action="Anular" asp-route-id="@item.Pedido.IdPedido" class="btn btn-sm btn-outline-danger">Anular</a>
                         </td>
                     </tr>
                 }
@@ -47,21 +60,4 @@
     </div>
 </div>
 
-<!-- SCRIPT DE FILTRADO -->
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const input = document.getElementById('buscarPedidos');
-            input.addEventListener('keyup', filtrarTabla);
 
-            function filtrarTabla() {
-                const valor = input.value.toLowerCase();
-                const filas = document.querySelectorAll('#tablaPedidos tbody tr');
-                filas.forEach(fila => {
-                    const textoFila = fila.textContent.toLowerCase();
-                    fila.style.display = textoFila.includes(valor) ? '' : 'none';
-                });
-            }
-        });
-    </script>
-}

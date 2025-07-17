@@ -1,4 +1,4 @@
-@model ModuloProduccionPiscina.Models.Pedido
+@model ModuloProduccionPiscina.Models.ViewModels.PedidoDetailsViewModel
 
 @{
     ViewData["Title"] = "Detalle del Pedido";
@@ -11,9 +11,12 @@
 
             <!-- Información del Pedido -->
             <div class="mb-4">
-                <p><strong>📆 Fecha de consumo:</strong> @Model.FechaConsumo.ToShortDateString()</p>
-                <p><strong>🏊 Piscina:</strong> @Model.Piscina?.Nombre</p>
-                <p><strong>👤 Registrado por:</strong> @(Model.UsuarioId?.Split('@')[0] ?? "No disponible")</p>
+                <p><strong>📆 Fecha de consumo:</strong> @Model.Pedido.FechaConsumo.ToShortDateString()</p>
+                <p><strong>🏊 Piscina:</strong> @Model.Pedido.Piscina?.Nombre</p>
+                <p><strong>👤 Registrado por:</strong> @((!string.IsNullOrEmpty(Model.UserName) && Model.UserName.Contains("@")) 
+                        ? Model.UserName.Split('@')[0] 
+                        : "No disponible")
+                </p>
             </div>
 
             <!-- Productos -->
@@ -27,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var detalle in Model.Detalles)
+                        @foreach (var detalle in Model.Pedido.Detalles)
                         {
                             <tr>
                                 <td>@detalle.Producto?.Nombre</td>
