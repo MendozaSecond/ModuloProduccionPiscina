@@ -1,0 +1,146 @@
+@model ModuloProduccionPiscina.Models.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary">Dashboard</h2>
+
+    <div class="row g-4">
+        <!-- Usuarios Registrados -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Usuarios Registrados</h5>
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <ul class="list-group list-group-flush">
+                            @foreach (var u in Model.Usuarios)
+                            {
+                                <li class="list-group-item">@u</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Totales -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Totales</h5>
+                    <p class="mb-2">Piscinas registradas: <strong>@Model.PiscinasRegistradas</strong></p>
+                    <p>Productos registrados: <strong>@Model.ProductosRegistrados</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pedidos por fecha -->
+    <div class="mt-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Pedidos por fecha</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Realizados</th>
+                                <th>Anulados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.PedidosPorFecha)
+                            {
+                                <tr>
+                                    <td>@item.Fecha.ToString("yyyy-MM-dd")</td>
+                                    <td>@item.Realizados</td>
+                                    <td>@item.Anulados</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <canvas id="pedidosChart" class="mt-3" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Consumo hoy -->
+    <div class="mt-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Consumo de productos hoy (@DateTime.Today.ToString("yyyy-MM-dd"))</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var c in Model.ConsumoProductosHoy)
+                            {
+                                <tr>
+                                    <td>@c.NombreProducto</td>
+                                    <td>@c.Total</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Consumo últimos 3 meses -->
+    <div class="mt-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Consumo de productos últimos 3 meses</h5>
+                <canvas id="consumoChart" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const pedidosLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PedidosPorFecha.OrderBy(p => p.Fecha).Select(p => p.Fecha.ToString("yyyy-MM-dd"))));
+        const pedidosRealizados = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PedidosPorFecha.OrderBy(p => p.Fecha).Select(p => p.Realizados)));
+        const pedidosAnulados = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PedidosPorFecha.OrderBy(p => p.Fecha).Select(p => p.Anulados)));
+
+        new Chart(document.getElementById('pedidosChart'), {
+            type: 'bar',
+            data: {
+                labels: pedidosLabels,
+                datasets: [
+                    { label: 'Realizados', data: pedidosRealizados, backgroundColor: 'rgba(54, 162, 235, 0.5)' },
+                    { label: 'Anulados', data: pedidosAnulados, backgroundColor: 'rgba(255, 99, 132, 0.5)' }
+                ]
+            }
+        });
+
+        const consumoLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.FechasUltimosTresMeses));
+        const consumoData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ConsumoTresMeses));
+        const datasets = [];
+        Object.keys(consumoData).forEach(function (key) {
+            datasets.push({
+                label: key,
+                data: consumoData[key],
+                fill: false,
+                tension: 0.1
+            });
+        });
+
+        new Chart(document.getElementById('consumoChart'), {
+            type: 'line',
+            data: {
+                labels: consumoLabels,
+                datasets: datasets
+            }
+        });
+    </script>
+}
