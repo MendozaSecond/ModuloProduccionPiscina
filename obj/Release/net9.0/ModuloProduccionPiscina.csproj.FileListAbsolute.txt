@@ -340,3 +340,9 @@ C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProducc
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Release\net9.0\ModuloProduccionPiscina.pdb
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Release\net9.0\ModuloProduccionPiscina.genruntimeconfig.cache
 C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\obj\Release\net9.0\ref\ModuloProduccionPiscina.dll
+C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\bin\Release\net9.0\publish\web.config
+C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\bin\Release\net9.0\publish\appsettings.Development.json
+C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\bin\Release\net9.0\publish\appsettings.json
+C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\bin\Release\net9.0\publish\ModuloProduccionPiscina.deps.json
+C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\bin\Release\net9.0\publish\ModuloProduccionPiscina.runtimeconfig.json
+C:\Users\edwin.mendoza\Documents\Prototipo\ModuloProduccionPiscina\ModuloProduccionPiscina\bin\Release\net9.0\publish\ModuloProduccionPiscina.staticwebassets.endpoints.json

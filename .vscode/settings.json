@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/2dc10b2b-893e-406c-b8a1-328a913727d5/resourceGroups/azuresql/providers/Microsoft.Web/sites/tesisedwinmendoza",
+    "appService.deploySubpath": "bin\\Release\\net9.0\\publish"
+}
