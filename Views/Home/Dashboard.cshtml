@@ -3,11 +3,21 @@
     ViewData["Title"] = "Dashboard";
 }
 
+<!--
+    Vista Dashboard principal.
+    Muestra información resumida sobre usuarios, piscinas, productos, pedidos y consumo de productos.
+    Utiliza el modelo DashboardViewModel para obtener los datos.
+-->
+
 <div class="container mt-4">
     <h2 class="mb-4 text-primary">Dashboard</h2>
 
     <div class="row g-4">
-        <!-- Usuarios Registrados -->
+        <!--
+            Sección: Usuarios Registrados
+            Lista todos los usuarios registrados en el sistema.
+            Los usuarios se muestran en una lista desplazable. 
+        -->
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
@@ -24,7 +34,10 @@
             </div>
         </div>
 
-        <!-- Totales -->
+        <!--
+            Sección: Totales
+            Muestra el total de piscinas y productos registrados en el sistema.
+        -->
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
@@ -36,7 +49,11 @@
         </div>
     </div>
 
-    <!-- Pedidos por fecha -->
+    <!--
+        Sección: Pedidos por fecha
+        Tabla que muestra la cantidad de pedidos realizados y anulados por fecha.
+        Incluye una gráfica de barras para visualizar los datos.
+    -->
     <div class="mt-5">
         <div class="card shadow-sm">
             <div class="card-body">
@@ -62,12 +79,16 @@
                         </tbody>
                     </table>
                 </div>
+                <!-- Gráfica de barras de pedidos por fecha -->
                 <canvas id="pedidosChart" class="mt-3" height="120"></canvas>
             </div>
         </div>
     </div>
 
-    <!-- Consumo hoy -->
+    <!--
+        Sección: Consumo de productos hoy
+        Tabla que muestra el consumo total de cada producto en el día actual.
+    -->
     <div class="mt-5">
         <div class="card shadow-sm">
             <div class="card-body">
@@ -95,7 +116,10 @@
         </div>
     </div>
 
-    <!-- Consumo últimos 3 meses -->
+    <!--
+        Sección: Consumo de productos últimos 3 meses
+        Gráfica de líneas que muestra el consumo de productos por mes en los últimos 3 meses.
+    -->
     <div class="mt-5">
         <div class="card shadow-sm">
             <div class="card-body">
@@ -108,6 +132,7 @@
 
 @section Scripts {
     <script>
+        // Gráfica de pedidos por fecha (barras)
         const pedidosLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PedidosPorFecha.OrderBy(p => p.Fecha).Select(p => p.Fecha.ToString("yyyy-MM-dd"))));
         const pedidosRealizados = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PedidosPorFecha.OrderBy(p => p.Fecha).Select(p => p.Realizados)));
         const pedidosAnulados = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PedidosPorFecha.OrderBy(p => p.Fecha).Select(p => p.Anulados)));
@@ -123,6 +148,7 @@
             }
         });
 
+        // Gráfica de consumo de productos últimos 3 meses (líneas)
         const consumoLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.FechasUltimosTresMeses));
         const consumoData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ConsumoTresMeses));
         const datasets = [];
